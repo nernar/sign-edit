@@ -21,6 +21,10 @@
 	],
 	"compile": [
 		{
+			"type": "java",
+			"source": "java/signedit"
+		},
+		{
 			"type": "native",
 			"source": "native/signedit"
 		}

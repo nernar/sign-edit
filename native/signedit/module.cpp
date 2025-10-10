@@ -10,6 +10,7 @@
 #include <stl/string>
 
 #include "includes/Actor.h"
+#include "includes/Block.h"
 #include "includes/BlockActor.h"
 #include "includes/BlockSource.h"
 #include "includes/ClientInstance.h"
@@ -48,15 +49,18 @@ namespace SignEdit {
 			BlockPos pos(x, y, z);
 			BlockActor* blockActor = region->getBlockEntity(pos);
 			if (blockActor != nullptr && blockActor->isType(BlockActorType::SIGN)) {
+				SignBlock* signBlock = (SignBlock*) region->getBlock(pos)->getBlockLegacy();
+				((SignBlockActor*) blockActor)->setType(signBlock->getSignType());
 				SignEdit::pushSignScreen(player, (SignBlockActor*) blockActor);
 			}
 		}
 	}
 	void updateTextbox() {
-		// AppPlatform* platform = GlobalContext::getAppPlatform();
-		// platform->updateTextBoxText(SignEdit::openedSignMessage);
-		// SignEdit::openedSignScreen->setTextboxText(SignEdit::openedSignMessage);
-		Logger::info("SignEdit", SignEdit::openedSignMessage.c_str());
+		if (SignEdit::openedSignScreen) {
+			AppPlatform* platform = GlobalContext::getAppPlatform();
+			platform->updateTextBoxText(SignEdit::openedSignMessage);
+			SignEdit::openedSignScreen->setTextboxText(SignEdit::openedSignMessage);
+		}
 	}
 };
 
@@ -73,11 +77,13 @@ MAIN {
 	new SignEditModule();
 }
 
-JS_MODULE_VERSION(SignEdit, 1);
+// JS_MODULE_VERSION(SignEdit, 1);
 
-JS_EXPORT(SignEdit, openSign, "V(III)", (JNIEnv* env, jint x, jint y, jint z) {
-	SignEdit::openSign(GlobalContext::getLocalPlayer(), x, y, z);
-});
-JS_EXPORT(SignEdit, updateTextbox, "V()", (JNIEnv* env) {
-	SignEdit::updateTextbox();
-});
+// JS_EXPORT(SignEdit, openSign, "V(III)", (JNIEnv* env, jint x, jint y, jint z) {
+	// SignEdit::openSign(GlobalContext::getLocalPlayer(), x, y, z);
+	// return 0;
+// });
+// JS_EXPORT(SignEdit, updateTextbox, "V()", (JNIEnv* env) {
+	// SignEdit::updateTextbox();
+	// return 0;
+// });

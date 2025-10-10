@@ -22,7 +22,7 @@ const SignEdit = {
 		"acacia_sign", "jungle_sign", "warped_sign", "crimson_sign"
 	],
 	BLOCK_ENTITY_TYPE: ETileEntityType.SIGN || 4,
-	LIBRARY: WRAP_NATIVE("SignEdit"),
+	// LIBRARY: WRAP_NATIVE("SignEdit"),
 	isSignRequiredToEdit() {
 		return this.signRequiredToEdit || false;
 	},
@@ -50,9 +50,9 @@ const SignEdit = {
 	}
 };
 
-if (SignEdit.LIBRARY == null) {
-	LowLevelUtils.throwException("SignEdit is not initialized properly, please make sure that library exist.");
-}
+// if (SignEdit.LIBRARY == null) {
+	// LowLevelUtils.throwException("SignEdit is not initialized properly, please make sure that library exist.");
+// }
 
 for (let index = 0; index < SignEdit.VANILLA_SIGN_IDS.length; index++) {
 	SignEdit.registerSign(SignEdit.VANILLA_SIGN_IDS[index]);
@@ -71,15 +71,14 @@ Callback.addCallback("ItemUseLocal", function(coords, item, block, playerUid) {
 		const sign = region.getBlockEntity(coords.x, coords.y, coords.z);
 		if (sign != null && sign.getType() == SignEdit.BLOCK_ENTITY_TYPE) {
 			Game.prevent();
-			SignEdit.LIBRARY.openSign(coords.x, coords.y, coords.z);
+			Packages.io.nernar.signedit.SignEdit.openSign(coords.x, coords.y, coords.z);
 		}
 	}
 });
 
 Callback.addCallback("NativeGuiChanged", function(screenName, lastScreenName) {
 	if (screenName == "sign_screen") {
-		// UI.getContext().updateTextboxText("\nabobus indev:\n" + lastScreenName);
-		SignEdit.LIBRARY.updateTextbox();
+		Packages.io.nernar.signedit.SignEdit.updateTextbox();
 	}
 });
 
