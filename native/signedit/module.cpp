@@ -8,13 +8,12 @@
 #include <stl.h>
 #include <stl/memory>
 #include <stl/string>
-#include <gsl/gsl-lite.hpp>
 
 #include "includes/Actor.h"
 #include "includes/BlockActor.h"
 #include "includes/BlockSource.h"
 #include "includes/ClientInstance.h"
-#include "includes/StringHash.h"
+#include "includes/SignBlock.h"
 
 class SignEditModule : public Module {
 public:
@@ -22,25 +21,6 @@ public:
 
 	virtual void initialize() {
 		DLHandleManager::initializeHandle("libminecraftpe.so", "mcpe");
-		// HookManager::addCallback(
-		// 	SYMBOL("mcpe", "_ZN20SignScreenController17_registerBindingsEv"),
-		// 	LAMBDA((SignScreenController* controller), {
-		// 		StringHash<gsl::string_span> hash("#text_box_item_name");
-		// 		controller->bindString(hash, stl::function<stl::string ()>() {
-		// 			return SignEdit::openedSignMessage;
-		// 		}, stl::function<bool ()>() {
-		// 			return false;
-		// 		});
-		// 	}, ),
-		// 	HookManager::CALL | HookManager::LISTENER
-		// );
-		HookManager::addCallback(
-			SYMBOL("mcpe", "_ZN10StringHashC2IN3gsl17basic_string_spanIKcLin1EEEEERKT_"),
-			LAMBDA((void* hash, const gsl::string_span& str), {
-				Logger::info("Aboba", "size: %d", str.length());
-			}, ),
-			HookManager::CALL | HookManager::LISTENER
-		);
 	}
 };
 

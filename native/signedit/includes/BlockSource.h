@@ -1,6 +1,9 @@
 #ifndef SIGNEDIT_BLOCKSOURCE_H
 #define SIGNEDIT_BLOCKSOURCE_H
 
+#ifndef SIGNEDIT_BLOCK_H
+	class Block;
+#endif
 #ifndef SIGNEDIT_BLOCKACTOR_H
 	class BlockActor;
 #endif
@@ -14,6 +17,7 @@ struct BlockPos {
 
 class BlockSource {
 public:
+	Block* getBlock(const BlockPos&) const;
 	BlockActor* getBlockEntity(const BlockPos&);
 };
 
