@@ -13,10 +13,12 @@
 #endif
 
 class ClientInstance {};
+class AppPlatform {};
 
-class AppPlatform {
+class AppPlatform_android : public AppPlatform {
 public:
 	void updateTextBoxText(const stl::string&);
+	void _showKeyboard(const stl::string&, int, bool, bool, bool);
 };
 
 class AbstractScene {};

@@ -16,15 +16,6 @@
 #include "includes/ClientInstance.h"
 #include "includes/SignBlock.h"
 
-class SignEditModule : public Module {
-public:
-	SignEditModule(): Module("signedit") {}
-
-	virtual void initialize() {
-		DLHandleManager::initializeHandle("libminecraftpe.so", "mcpe");
-	}
-};
-
 namespace SignEdit {
 	stl::shared_ptr<UIScene> openedSignScreen;
 	stl::string openedSignMessage;
@@ -43,7 +34,7 @@ namespace SignEdit {
 			}
 		}
 	}
-	void openSign(LocalPlayer* player, int x, int y, int z) {
+	void openSign(LocalPlayer* player, int x, int y, int z, int aboba = 0) {
 		BlockSource* region = player->getRegion();
 		if (region != nullptr) {
 			BlockPos pos(x, y, z);
@@ -57,19 +48,42 @@ namespace SignEdit {
 	}
 	void updateTextbox() {
 		if (SignEdit::openedSignScreen) {
-			AppPlatform* platform = GlobalContext::getAppPlatform();
-			platform->updateTextBoxText(SignEdit::openedSignMessage);
-			SignEdit::openedSignScreen->setTextboxText(SignEdit::openedSignMessage);
+			// native visual updating
+			// SignEdit::openedSignScreen->setTextboxText(SignEdit::openedSignMessage);
+			SignEdit::openedSignScreen.reset();
+			// AppPlatform_android* platform = (AppPlatform_android*) GlobalContext::getAppPlatform();
+			// edittext updating
+			// platform->updateTextBoxText(SignEdit::openedSignMessage);
 		}
 	}
 };
 
+class SignEditModule : public Module {
+public:
+	SignEditModule(): Module("signedit") {}
+
+	virtual void initialize() {
+		DLHandleManager::initializeHandle("libminecraftpe.so", "mcpe");
+		HookManager::addCallback(
+			SYMBOL("mcpe", "_ZN20SignScreenController6onOpenEv"),
+			LAMBDA((void* controller), {
+				if (SignEdit::openedSignScreen) {
+					// native visual updating
+					SignEdit::openedSignScreen->setTextboxText(SignEdit::openedSignMessage);
+					SignEdit::openedSignScreen.reset();
+				}
+			}, ),
+			HookManager::CALL | HookManager::LISTENER
+		);
+	}
+};
+
 extern "C" {
-	void Java_io_nernar_signedit_SignEdit_openSign(JNIEnv* env, jint x, jint y, jint z) {
+	void Java_io_nernar_signedit_SignEdit_openSign(JNIEnv* env, jclass clazz, jint x, jint y, jint z) {
 		SignEdit::openSign(GlobalContext::getLocalPlayer(), x, y, z);
 	}
-	void Java_io_nernar_signedit_SignEdit_updateTextbox(JNIEnv* env) {
-		SignEdit::updateTextbox();
+	void Java_io_nernar_signedit_SignEdit_updateTextbox(JNIEnv* env, jclass clazz) {
+		// SignEdit::updateTextbox();
 	}
 }
 

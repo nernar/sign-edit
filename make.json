@@ -29,9 +29,21 @@
 			"source": "native/signedit"
 		}
 	],
+	"native": {
+		"options": ["-std=c++11"],
+		"configurations": {
+			"arm64": {
+				"options": ["-std=c++17", "-DARM64=1"]
+			}
+		}
+	},
 	"additional": [
 		{
-			"source": "assets/*",
+			"source": "config.json",
+			"targetDir": "."
+		},
+		{
+			"source": "config.info.json",
 			"targetDir": "."
 		}
 	]

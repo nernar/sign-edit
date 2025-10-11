@@ -19,7 +19,7 @@ public:
 	void setType(SignBlockActor::SignType);
 };
 
-class SignBlock : BlockLegacy {
+class SignBlock : public BlockLegacy {
 public:
 	SignBlockActor::SignType getSignType() const;
 };

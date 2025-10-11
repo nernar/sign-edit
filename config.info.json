@@ -11,8 +11,8 @@
                 "ru": "Запуск"
             },
             "description": {
-                "en": "Changes launch state of modification; if disabled, mod willn't be launched.",
-                "ru": "Меняет состояния запускаемости мода, если отключено - мод запущен не будет."
+                "en": "Changes startup modification status; if disabled, it will not be launched.",
+                "ru": "Меняет состояние запускаемости мода, если отключено — мод запущен не будет."
             },
             "index": 0
         },
@@ -23,8 +23,8 @@
                 "ru": "Для редактирования необходима табличка"
             },
             "description": {
-                "en": "Text will be edited only if there's a registered sign in hand.",
-                "ru": "Текст будет редактироваться, только если в руке будет находиться зарегистированная табличка."
+                "en": "Text will only be edited if a registered sign is held in hand.",
+                "ru": "Текст будет редактироваться, только если в руке находится зарегистированная табличка."
             },
             "index": 1
         }
