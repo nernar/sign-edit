@@ -60,15 +60,19 @@ public:
 	virtual void initialize() {
 		DLHandleManager::initializeHandle("libminecraftpe.so", "mcpe");
 		HookManager::addCallback(
+#if defined(ARM64) || defined(_M_ARM64) || defined(__aarch64__)
 			SYMBOL("mcpe", "_ZN20SignScreenController6onOpenEv"),
-			LAMBDA((void* controller), {
+#else
+			SYMBOL("mcpe", "_ZN25MinecraftScreenController6onOpenEv"),
+#endif
+			LAMBDA((void* instance), {
 				if (SignEdit::openedSignScreen) {
 					SignEdit::openedSignScreen->setTextboxText(SignEdit::openedSignMessage);
 					SignEdit::openedSignMessage.clear();
 					SignEdit::openedSignScreen.reset();
 				}
 			}, ),
-			HookManager::CALL | HookManager::LISTENER
+			HookManager::LISTENER | HookManager::CALL
 		);
 	}
 };
