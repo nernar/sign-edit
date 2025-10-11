@@ -1,6 +1,6 @@
 /*
 
-   Copyright 2022-2024 Nernar (github.com/nernar)
+   Copyright 2022-2025 Nernar (github.com/nernar)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -73,12 +73,6 @@ Callback.addCallback("ItemUseLocal", function(coords, item, block, playerUid) {
 			Game.prevent();
 			Packages.io.nernar.signedit.SignEdit.openSign(coords.x, coords.y, coords.z);
 		}
-	}
-});
-
-Callback.addCallback("NativeGuiChanged", function(screenName, lastScreenName) {
-	if (screenName == "sign_screen") {
-		Packages.io.nernar.signedit.SignEdit.updateTextbox();
 	}
 });
 

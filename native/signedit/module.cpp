@@ -19,22 +19,27 @@
 namespace SignEdit {
 	stl::shared_ptr<UIScene> openedSignScreen;
 	stl::string openedSignMessage;
+
 	void pushSignScreen(LocalPlayer* player, SignBlockActor* sign) {
 		ClientInstance* client = player->getClientInstance();
 		if (client != nullptr) {
 			VTABLE_FIND_OFFSET(ClientInstance_getCurrentSceneStack, _ZTV14ClientInstance, _ZNK14ClientInstance20getCurrentSceneStackEv);
 			VTABLE_FIND_OFFSET(ClientInstance_getSceneFactory, _ZTV14ClientInstance, _ZNK14ClientInstance15getSceneFactoryEv);
+
 			SceneStack* sceneStack = VTABLE_CALL<SceneStack*>(ClientInstance_getCurrentSceneStack, client);
 			SceneFactory* sceneFactory = VTABLE_CALL<SceneFactory*>(ClientInstance_getSceneFactory, client);
 			if (sceneStack != nullptr && sceneFactory != nullptr) {
-				SignEdit::openedSignMessage = sign->getMessage();
 				stl::shared_ptr<UIScene> scene = sceneFactory->createSignScreen(sign->getPosition());
-				SignEdit::openedSignScreen = scene;
+				SignEdit::openedSignMessage = sign->getMessage();
+				if (SignEdit::openedSignMessage.length() != 0) {
+					SignEdit::openedSignScreen = scene;
+				}
 				sceneStack->pushScreen(scene, false);
 			}
 		}
 	}
-	void openSign(LocalPlayer* player, int x, int y, int z, int aboba = 0) {
+
+	void openSign(LocalPlayer* player, int x, int y, int z) {
 		BlockSource* region = player->getRegion();
 		if (region != nullptr) {
 			BlockPos pos(x, y, z);
@@ -44,16 +49,6 @@ namespace SignEdit {
 				((SignBlockActor*) blockActor)->setType(signBlock->getSignType());
 				SignEdit::pushSignScreen(player, (SignBlockActor*) blockActor);
 			}
-		}
-	}
-	void updateTextbox() {
-		if (SignEdit::openedSignScreen) {
-			// native visual updating
-			// SignEdit::openedSignScreen->setTextboxText(SignEdit::openedSignMessage);
-			SignEdit::openedSignScreen.reset();
-			// AppPlatform_android* platform = (AppPlatform_android*) GlobalContext::getAppPlatform();
-			// edittext updating
-			// platform->updateTextBoxText(SignEdit::openedSignMessage);
 		}
 	}
 };
@@ -68,8 +63,8 @@ public:
 			SYMBOL("mcpe", "_ZN20SignScreenController6onOpenEv"),
 			LAMBDA((void* controller), {
 				if (SignEdit::openedSignScreen) {
-					// native visual updating
 					SignEdit::openedSignScreen->setTextboxText(SignEdit::openedSignMessage);
+					SignEdit::openedSignMessage.clear();
 					SignEdit::openedSignScreen.reset();
 				}
 			}, ),
@@ -82,9 +77,6 @@ extern "C" {
 	void Java_io_nernar_signedit_SignEdit_openSign(JNIEnv* env, jclass clazz, jint x, jint y, jint z) {
 		SignEdit::openSign(GlobalContext::getLocalPlayer(), x, y, z);
 	}
-	void Java_io_nernar_signedit_SignEdit_updateTextbox(JNIEnv* env, jclass clazz) {
-		// SignEdit::updateTextbox();
-	}
 }
 
 MAIN {
@@ -95,9 +87,5 @@ MAIN {
 
 // JS_EXPORT(SignEdit, openSign, "V(III)", (JNIEnv* env, jint x, jint y, jint z) {
 	// SignEdit::openSign(GlobalContext::getLocalPlayer(), x, y, z);
-	// return 0;
-// });
-// JS_EXPORT(SignEdit, updateTextbox, "V()", (JNIEnv* env) {
-	// SignEdit::updateTextbox();
 	// return 0;
 // });

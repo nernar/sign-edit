@@ -8,19 +8,8 @@
 #ifndef SIGNEDIT_BLOCKSOURCE_H
 	struct BlockPos;
 #endif
-#ifndef SIGNEDIT_STRINGHASH_H
-	class StringHash;
-#endif
 
 class ClientInstance {};
-class AppPlatform {};
-
-class AppPlatform_android : public AppPlatform {
-public:
-	void updateTextBoxText(const stl::string&);
-	void _showKeyboard(const stl::string&, int, bool, bool, bool);
-};
-
 class AbstractScene {};
 
 class UIScene : public AbstractScene {
@@ -37,12 +26,5 @@ class SceneStack {
 public:
 	void pushScreen(stl::shared_ptr<AbstractScene>, bool);
 };
-
-class ScreenController {
-public:
-	void bindString(const StringHash&, const stl::function<stl::string ()>&, const stl::function<bool ()>&);
-};
-
-class SignScreenController : public ScreenController {};
 
 #endif
