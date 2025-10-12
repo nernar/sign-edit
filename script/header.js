@@ -23,6 +23,9 @@ const SignEdit = {
 	],
 	BLOCK_ENTITY_TYPE: ETileEntityType.SIGN || 4,
 	// LIBRARY: WRAP_NATIVE("SignEdit"),
+	openSign(x, y, z) {
+		Packages.io.nernar.signedit.SignEdit.openSign(x, y, z);
+	},
 	isSignRequiredToEdit() {
 		return this.signRequiredToEdit || false;
 	},
@@ -71,7 +74,7 @@ Callback.addCallback("ItemUseLocal", function(coords, item, block, playerUid) {
 		const sign = region.getBlockEntity(coords.x, coords.y, coords.z);
 		if (sign != null && sign.getType() == SignEdit.BLOCK_ENTITY_TYPE) {
 			Game.prevent();
-			Packages.io.nernar.signedit.SignEdit.openSign(coords.x, coords.y, coords.z);
+			SignEdit.openSign(coords.x, coords.y, coords.z);
 		}
 	}
 });
