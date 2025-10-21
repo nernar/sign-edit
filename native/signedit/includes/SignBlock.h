@@ -2,7 +2,6 @@
 #define SIGNEDIT_SIGNBLOCK_H
 
 #include <stl.h>
-#include <stl/string>
 
 #ifndef SIGNEDIT_BLOCK_H
 	class BlockLegacy;
@@ -15,7 +14,7 @@ class SignBlockActor : public BlockActor {
 public:
 	enum SignType : int {};
 
-	stl::string& getMessage();
+	stl_string& getMessage();
 	void setType(SignBlockActor::SignType);
 };
 

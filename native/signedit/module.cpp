@@ -6,8 +6,6 @@
 #include <innercore/vtable.h>
 
 #include <stl.h>
-#include <stl/memory>
-#include <stl/string>
 
 #include "includes/Actor.h"
 #include "includes/Block.h"
@@ -17,8 +15,8 @@
 #include "includes/SignBlock.h"
 
 namespace SignEdit {
-	stl::shared_ptr<UIScene> openedSignScreen;
-	stl::string openedSignMessage;
+	stl_shared_ptr<UIScene> openedSignScreen;
+	stl_string openedSignMessage;
 
 	void pushSignScreen(LocalPlayer* player, SignBlockActor* sign) {
 		ClientInstance* client = player->getClientInstance();
@@ -29,7 +27,7 @@ namespace SignEdit {
 			SceneStack* sceneStack = VTABLE_CALL<SceneStack*>(ClientInstance_getCurrentSceneStack, client);
 			SceneFactory* sceneFactory = VTABLE_CALL<SceneFactory*>(ClientInstance_getSceneFactory, client);
 			if (sceneStack != nullptr && sceneFactory != nullptr) {
-				stl::shared_ptr<UIScene> scene = sceneFactory->createSignScreen(sign->getPosition());
+				stl_shared_ptr<UIScene> scene = sceneFactory->createSignScreen(sign->getPosition());
 				SignEdit::openedSignMessage = sign->getMessage();
 				if (SignEdit::openedSignMessage.length() != 0) {
 					SignEdit::openedSignScreen = scene;
